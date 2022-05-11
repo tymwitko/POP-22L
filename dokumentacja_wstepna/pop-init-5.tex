@@ -1,7 +1,6 @@
-% !TEX encoding = cp1250
 \documentclass[a4paper,titlepage,11pt,twosides,floatssmall]{mwrep}
 \usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
-\usepackage[OT1]{fontenc}
+\usepackage[T1]{fontenc}
 \usepackage{polski}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -10,10 +9,12 @@
 \usepackage{float}
 \usepackage{url}
 \usepackage{tikz}
+\usepackage{multirow}
+\usepackage{nicematrix}
 \usetikzlibrary{arrows,calc,decorations.markings,math,arrows.meta}
 \usepackage{rotating}
 \usepackage[percent]{overpic}
-\usepackage[cp1250]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{xcolor}
 \usepackage{colortbl}
 \usepackage{pgfplots}
@@ -22,16 +23,19 @@
 \usepackage{matlab-prettifier}
 \usepackage{enumitem,amssymb}
 \definecolor{szary}{rgb}{0.95,0.95,0.95}
-\usepackage{tabularx}
 \usepackage{siunitx}
-\usepackage{makecell}
 \sisetup{detect-weight,exponent-product=\cdot,output-decimal-marker={,},per-mode=symbol,binary-units=true,range-phrase={-},range-units=single}
 \SendSettingsToPgf
 %konfiguracje pakietu listings
 \lstset{
 	backgroundcolor=\color{szary},
 	frame=single,
-	breaklines=true,
+    breaklines 			= true,
+	breakatwhitespace 	= false,
+	prebreak 			= \space,
+	postbreak           = \mbox{\textcolor{red}{$\hookrightarrow$}\space},
+	tabsize=4,
+	numbers=left,
 }
 \lstdefinestyle{customlatex}{
 	basicstyle=\footnotesize\ttfamily,
@@ -51,20 +55,19 @@
 }
 \lstdefinestyle{custommatlab}{
 	captionpos=t,
-	breaklines=true,
 	frame=tb,
 	xleftmargin=0pt,
 	language=matlab,
 	showstringspaces=false,
 	basicstyle=\footnotesize\ttfamily,
-	%basicstyle=\scriptsize\ttfamily,
+%	basicstyle=\scriptsize\ttfamily,
 	keywordstyle=\bfseries\color{green!40!black},
 	commentstyle=\itshape\color{purple!40!black},
 	identifierstyle=\color{blue},
 	stringstyle=\color{orange},
 }
 
-%wymiar tekstu (bez ¿ywej paginy)
+%wymiar tekstu (bez Å¼ywej paginy)
 \textwidth 160mm \textheight 247mm
 
 %ustawienia pakietu pgfplots
@@ -75,10 +78,10 @@ legend style={font=\small},
 title style={font=\small}
 }
 
-\def\figurename{Rys.}
+\def\figurename{Rys.}	
 \def\tablename{Tab.}
 
-%konfiguracja liczby p³ywaj¹cych elementów
+%konfiguracja liczby pÅ‚ywajÄ…cych elementÃ³w
 \setcounter{topnumber}{0}%2
 \setcounter{bottomnumber}{3}%1
 \setcounter{totalnumber}{5}%3
@@ -91,22 +94,22 @@ title style={font=\small}
 \frenchspacing
 \pagestyle{uheadings}
 
-%strona tytu³owa
-\title{\bf Dokumentacja wstêpna zadania nr 5\vskip 0.1cm}
+%strona tytuÅ‚owa
+\title{\bf Dokumentacja wstÄ™pna zadania nr 5\vskip 0.1cm}
 \author{Tymon Kobylecki, Mateusz Palczuk}
 \date{2022}
 
 \makeatletter
 \renewcommand{\maketitle}{\begin{titlepage}
 \begin{center}{\LARGE {\bf
-Wydzia³ Elektroniki i Technik Informacyjnych}}\\
+WydziaÅ‚ Elektroniki i Technik Informacyjnych}}\\
 \vspace{0.4cm}
 {\LARGE {\bf Politechnika Warszawska}}\\
 \vspace{0.3cm}
 \end{center}
 \vspace{5cm}
 \begin{center}
-{\bf \LARGE Przeszukiwanie i optymalizacja \vskip 0.1cm}
+{\bf \LARGE Przeszukiwanie i Optymalizacja \vskip 0.1cm}
 \end{center}
 \vspace{1cm}
 \begin{center}
@@ -127,7 +130,5 @@ Wydzia³ Elektroniki i Technik Informacyjnych}}\\
 \maketitle
 
 \tableofcontents
-\input{wstep}
 \input{projekt}
 \end{document}
-
