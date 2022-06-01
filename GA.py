@@ -21,6 +21,8 @@ def genetic(q, μ, pm, pc, iters, length, maks, mini, m):
     best = -inf
     best_pat = []
     while t < iters:
+        # print(round(2137.2137, 2))
+        print(' ', str(round(t*100/iters, 2)) + '%', end='\r')
         Re = select(Po, μ, q, maks, mini, m)
         Mu = cross_mut(Re, pm, pc )
         Po = Mu
@@ -39,6 +41,7 @@ def genetic(q, μ, pm, pc, iters, length, maks, mini, m):
             # else:
                 # print(":C")
         t = t + 1
+    print('  100%')
     # for pattern in Po:
     #     if q(pattern) > best:
     #         best = q(pattern)
@@ -130,8 +133,8 @@ if __name__ == "__main__":
     gejm.create_random(n, mini, maks)
     print(gejm.board)
 
-    iters = 20000
-    pop_size = 100
+    iters = 200_000
+    pop_size = 500
     pm = 0.1
     pc = 0.1
     # for i in range(25):
