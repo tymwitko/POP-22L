@@ -2,4 +2,4 @@
 *.log
 *.synctex.gz
 *.toc
-*.pdf
+.vscode/
