@@ -14,19 +14,21 @@ class Game:
         """
         returns True if state is valid
         """
+        if sum(state.flatten()) > self.m:
+            return False
         for row in range(1, self.board.shape[0]-1):
             for col in range(1, self.board.shape[1]-1):
                 if state[row][col]:
                     if not self.check_one(state, row, col):
                         return False
-        for col in range(1, self.board.shape[0]-1):
-            for row in (0, state.shape[0]-1):
+        for row in range(1, self.board.shape[0]-1):
+            for col in (0, self.board.shape[1]-1):
                 if state[row][col]:
                     for i in (-1, 1):
                         if state[row+i][col]:
                             return False
-        for col in range(1, self.board.shape[1]-1):
-            for row in (0, state.shape[1]-1):
+        for row in (0, state.shape[0]-1):
+            for col in range(1, self.board.shape[1]-1):
                 if state[row][col]:
                     for i in (-1, 1):
                         if state[row][col+i]:
@@ -53,12 +55,18 @@ class Game:
             return -np.inf
 
 def main():
-    game = Game(19)
-    game.create_random(4, 0, 10)
-    print(game.board)
-    state = [0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1]
-    print(state)
-    print(game.goal_func(state))
+    for i in range(100000):
+        m = 19
+        n = 2
+        game = Game(m)
+        game.create_random(n, 0, 10)
+        # print(game.board)
+        state = np.random.randint(0, high=2, size=(1, 4*n))
+        state = list(state.flatten())
+        # state = [0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1]
+        # print(state)
+        # print(list(state))
+        game.goal_func(state)
 
 if __name__ == "__main__":
     main()
