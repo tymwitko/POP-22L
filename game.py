@@ -55,17 +55,13 @@ class Game:
             return -np.inf
 
 def main():
-    for i in range(100000):
-        m = 19
-        n = 2
+    for _ in range(100_000):
+        m = 100
+        n = 100
         game = Game(m)
         game.create_random(n, 0, 10)
-        # print(game.board)
         state = np.random.randint(0, high=2, size=(1, 4*n))
         state = list(state.flatten())
-        # state = [0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1]
-        # print(state)
-        # print(list(state))
         game.goal_func(state)
 
 if __name__ == "__main__":
