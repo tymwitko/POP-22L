@@ -13,20 +13,15 @@ class Game:
         self.board = np.random.randint(min, high=max, size=(4, n))
 
     def save_board_to_file(self, filename:str) -> bool:
-        board_str = [str(elem)+'\n' for elem in list(self.board.flatten())]
         try:
-            with open(filename, 'w') as file:
-                file.writelines(board_str)
+            np.savetxt(filename, self.board, delimiter=',', fmt='%d')
         except:
             return False
         return True
 
-    def read_board_from_file(self, flename:str) -> bool:
+    def read_board_from_file(self, filename:str) -> bool:
         try:
-            with open(flename, 'r') as file:
-                lines = file.readlines()
-            lines = [int(line) for line in lines]
-            self.board = np.reshape(lines, (4, -1))
+            self.board = np.loadtxt(filename, delimiter=',', dtype=int)
         except:
             return False
         return True

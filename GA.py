@@ -127,9 +127,11 @@ def main():
     pop_size = 500
     pm = 0.1
     pc = 0.1
-    gejm.save_board_to_file('test.txt')
-    gejm.read_board_from_file('test.txt')
+    gejm.save_board_to_file('test.csv')
+    print(type(gejm.board[0][0]))
+    gejm.read_board_from_file('test.csv')
     print(gejm.board)
+    print(type(gejm.board[0][0]))
     for _ in range(10):
         state, score = genetic(gejm.goal_func, pop_size, pm, pc, iters, n*4, maks, mini, m)
         state = np.array(state)
