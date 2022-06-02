@@ -108,22 +108,26 @@ def popul_init(μ, length):
     return Po
 
 def main():
+    set_seed_ga = False
+    set_seed_game = True
     seed = 2137
-    random.seed(seed)
-    np.random.seed(seed)
+    if set_seed_ga:
+        random.seed(seed)
+        np.random.seed(seed)
+
     m = 16
     n = 8
     mini = -10
     maks = 10
-    gejm = Game(m, set_seed=True, seed=seed)
+    gejm = Game(m, set_seed=set_seed_game, seed=seed)
     gejm.create_random(n, mini, maks)
     print(gejm.board)
 
-    iters = 2_000
+    iters = 200
     pop_size = 500
     pm = 0.1
     pc = 0.1
-    for _ in range(1):
+    for _ in range(10):
         state, score = genetic(gejm.goal_func, pop_size, pm, pc, iters, n*4, maks, mini, m)
         state = np.array(state)
         state = np.reshape(state, (4, -1))
