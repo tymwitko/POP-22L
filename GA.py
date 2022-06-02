@@ -16,38 +16,21 @@ def genetic(q, μ, pm, pc, iters, length, maks, mini, m):
     mini - minimalna wartość na planszy
     m - liczba kart
     '''
-    t = 0
     Po = popul_init(μ, length)
     best = -inf
     best_pat = []
-    while t < iters:
-        # print(round(2137.2137, 2))
-        print(' ', str(round(t*100/iters, 2)) + '%', end='\r')
+    for t in range(iters):
+        print(' ', str(round(t*100/iters)) + '%', end='\r')
         Re = select(Po, μ, q, maks, mini, m)
         Mu = cross_mut(Re, pm, pc )
         Po = Mu
         for pat in Po:
             val = q(pat)
-            # print(pat, q(pat))
             if val > best:
-                # print(np.reshape(pat, (4, -1)))
-                # print(val)
                 best = val
                 best_pat = copy.deepcopy(pat)
-                # print("best:")
-                # print(np.reshape(best_pat, (4, -1)), '\n')
             if best >= 0:
                 pass
-            # else:
-                # print(":C")
-        t = t + 1
-    print('  100%')
-    # for pattern in Po:
-    #     if q(pattern) > best:
-    #         best = q(pattern)
-    #         best_pat = pattern
-    # print("ostatni best:")
-    # print(np.reshape(best_pat, (4, -1)), '\n')
     return best_pat, best
 
 def probability(P, pattern, q, maks, mini, m):
@@ -124,26 +107,31 @@ def popul_init(μ, length):
         Po.append(temp.tolist())
     return Po
 
-if __name__ == "__main__":
+def main():
+    seed = 2137
+    random.seed(seed)
+    np.random.seed(seed)
     m = 16
     n = 8
     mini = -10
     maks = 10
-    gejm = Game(m)
+    gejm = Game(m, set_seed=True, seed=seed)
     gejm.create_random(n, mini, maks)
     print(gejm.board)
 
-    iters = 200_000
+    iters = 2_000
     pop_size = 500
     pm = 0.1
     pc = 0.1
-    # for i in range(25):
-    # print(gejm.goal_func([0, 1, 1, 0, 0, 1, 1, 0]))
-    state, score = genetic(gejm.goal_func, pop_size, pm, pc, iters, n*4, maks, mini, m)
-    state = np.array(state)
-    state = np.reshape(state, (4, -1))
-    print(state, score)
-    try:
-        print(gejm.goal_func(state))
-    except Exception:
-        pass
+    for _ in range(1):
+        state, score = genetic(gejm.goal_func, pop_size, pm, pc, iters, n*4, maks, mini, m)
+        state = np.array(state)
+        state = np.reshape(state, (4, -1))
+        print(state, score)
+        try:
+            print(gejm.goal_func(state))
+        except Exception:
+            pass
+
+if __name__ == "__main__":
+    main()

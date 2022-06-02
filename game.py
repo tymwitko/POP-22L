@@ -1,7 +1,9 @@
 import numpy as np
 
 class Game:
-    def __init__(self, m:int) -> None:
+    def __init__(self, m:int, set_seed:bool=False, seed:int=2137) -> None:
+        if set_seed:
+            np.random.seed(seed)
         self.m = m
 
     def create_random(self, n:int, min:int, max:int) -> bool:
@@ -10,39 +12,24 @@ class Game:
         """
         self.board = np.random.randint(min, high=max, size=(4, n))
 
-    def validate_state(self, state:np.array):
+    def validate_state(self, state:np.array) -> bool:
         """
         returns True if state is valid
         """
-        if sum(state.flatten()) > self.m:
+        if state.sum() > self.m:
             return False
-        for row in range(1, self.board.shape[0]-1):
-            for col in range(1, self.board.shape[1]-1):
+        for row in range(1, state.shape[0]):
+            for col in range(1, state.shape[1]):
                 if state[row][col]:
-                    if not self.check_one(state, row, col):
+                    if state[row-1][col]:
                         return False
-        for row in range(1, self.board.shape[0]-1):
-            for col in (0, self.board.shape[1]-1):
-                if state[row][col]:
-                    for i in (-1, 1):
-                        if state[row+i][col]:
-                            return False
-        for row in (0, state.shape[0]-1):
-            for col in range(1, self.board.shape[1]-1):
-                if state[row][col]:
-                    for i in (-1, 1):
-                        if state[row][col+i]:
-                            return False
-        return True
-
-    def check_one(self, state:np.array, row:int, col:int) -> bool:
-        """
-        returns True if all neighbours are empty
-        """
-        for i in (-1, 1):
-            if state[row+i][col]:
+                    if state[row][col-1]:
+                        return False
+        for row in range(1, state.shape[0]):
+            if state[row][0] and state[row-1][0]:
                 return False
-            if state[row][col+i]:
+        for col in range(1, state.shape[1]):
+            if state[0][col] and state[0][col-1]:
                 return False
         return True
 
