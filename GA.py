@@ -108,7 +108,32 @@ def popul_init(μ, length):
         Po.append(temp.tolist())
     return Po
 
+def save_params(m, n, mini, maks, iters, pop_size, pm, pc, seed_ga, seed_game, filename):
+    tmp = []
+    tmp.append("m = " + str(m) + '\n')
+    tmp.append("n = " + str(n) + '\n')
+    tmp.append("mini = " + str(mini) + '\n')
+    tmp.append("maks = " + str(maks) + '\n')
+    tmp.append("iters = " + str(iters) + '\n')
+    tmp.append("pop_size = " + str(pop_size) + '\n')
+    tmp.append("pm = " + str(pm) + '\n')
+    tmp.append("pc = " + str(pc) + '\n')
+    tmp.append("seed_ga = " + str(seed_ga) + '\n')
+    tmp.append("seed_game = " + str(seed_game) + '\n')
+    try:
+        with open(filename+"_params.txt", 'w') as file:
+            file.writelines(tmp)
+    except:
+        print("SAVING PARAMS TO FILE FAILED!")
+
+def save_result(state, score, filename):
+    try:
+        np.savetxt(filename+"_result.txt", state, delimiter=',', fmt='%d', footer="Score: "+str(score))
+    except:
+        print("SAVING RESULT TO FILE FAILED!")
+
 def main():
+    filename = input("Give filename to save results (without extension, .txt will be used): ")
     # setting seeds
     set_seed_ga = True
     seed_ga = 2137
@@ -123,8 +148,8 @@ def main():
     mini = -10
     maks = 10
     # GA params
-    iters = 200_000
-    pop_size = 1_000
+    iters = 200_0
+    pop_size = 1_00
     pm = 0.1
     pc = 0.1
     # create game
@@ -140,6 +165,11 @@ def main():
         print(gejm.goal_func(state))
     except Exception:
         pass
+    # save results to files
+    save_params(m, n, mini, maks, iters, pop_size, pm, pc, seed_ga, seed_game, filename)
+    save_result(state, score, filename)
+    gejm.save_board_to_file(filename+"_board.txt")
+    
 
 if __name__ == "__main__":
     main()
