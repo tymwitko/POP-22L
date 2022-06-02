@@ -120,13 +120,16 @@ def main():
     mini = -10
     maks = 10
     gejm = Game(m, set_seed=set_seed_game, seed=seed)
-    gejm.create_random(n, mini, maks)
+    gejm.create_random_board(n, mini, maks)
     print(gejm.board)
 
     iters = 200
     pop_size = 500
     pm = 0.1
     pc = 0.1
+    gejm.save_board_to_file('test.txt')
+    gejm.read_board_from_file('test.txt')
+    print(gejm.board)
     for _ in range(10):
         state, score = genetic(gejm.goal_func, pop_size, pm, pc, iters, n*4, maks, mini, m)
         state = np.array(state)
