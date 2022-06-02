@@ -20,7 +20,7 @@ def genetic(q, μ, pm, pc, iters, length, maks, mini, m):
     best = -inf
     best_pat = []
     for t in range(iters):
-        print(' ', str(round(t*100/iters)) + '%', end='\r')
+        print(' ', str(round(t*100/iters, 3)) + '%   ', end='\r')
         Re = select(Po, μ, q, maks, mini, m)
         Mu = cross_mut(Re, pm, pc )
         Po = Mu
@@ -31,6 +31,7 @@ def genetic(q, μ, pm, pc, iters, length, maks, mini, m):
                 best_pat = copy.deepcopy(pat)
             if best >= 0:
                 pass
+    print('          ', end='\r')
     return best_pat, best
 
 def probability(P, pattern, q, maks, mini, m):
@@ -108,39 +109,37 @@ def popul_init(μ, length):
     return Po
 
 def main():
-    set_seed_ga = False
+    # setting seeds
+    set_seed_ga = True
+    seed_ga = 2137
     set_seed_game = True
-    seed = 2137
+    seed_game = 2137
     if set_seed_ga:
-        random.seed(seed)
-        np.random.seed(seed)
-
+        random.seed(seed_ga)
+        np.random.seed(seed_ga)
+    # game params
     m = 16
     n = 8
     mini = -10
     maks = 10
-    gejm = Game(m, set_seed=set_seed_game, seed=seed)
-    gejm.create_random_board(n, mini, maks)
-    print(gejm.board)
-
-    iters = 200
-    pop_size = 500
+    # GA params
+    iters = 200_000
+    pop_size = 1_000
     pm = 0.1
     pc = 0.1
-    gejm.save_board_to_file('test.csv')
-    print(type(gejm.board[0][0]))
-    gejm.read_board_from_file('test.csv')
+    # create game
+    gejm = Game(m, set_seed=set_seed_game, seed=seed_game)
+    gejm.create_random_board(n, mini, maks)
     print(gejm.board)
-    print(type(gejm.board[0][0]))
-    for _ in range(10):
-        state, score = genetic(gejm.goal_func, pop_size, pm, pc, iters, n*4, maks, mini, m)
-        state = np.array(state)
-        state = np.reshape(state, (4, -1))
-        print(state, score)
-        try:
-            print(gejm.goal_func(state))
-        except Exception:
-            pass
+    # run GA
+    state, score = genetic(gejm.goal_func, pop_size, pm, pc, iters, n*4, maks, mini, m)
+    state = np.array(state)
+    state = np.reshape(state, (4, -1))
+    print(state, score)
+    try:
+        print(gejm.goal_func(state))
+    except Exception:
+        pass
 
 if __name__ == "__main__":
     main()
