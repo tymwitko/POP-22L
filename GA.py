@@ -146,7 +146,7 @@ def run_ga(params:dict, filename:str="") -> None:
     state = np.reshape(state, (4, -1))
     print(state, score)
     # save results to files
-    if filename != "":
+    if filename != "" and filename[-1] != '/':
         save_params(params, filename)
         save_result(state, score, filename)
         gejm.save_board_to_file(filename+"_board.txt")
