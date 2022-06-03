@@ -90,7 +90,7 @@ def cross(P, pc):
             except IndexError:
                 point = random.randrange(len(P[ind]))
                 P[ind][point:] = P[0][point:]
-                crossed.append(P[ind][point:])
+                crossed.append(P[ind])
         else:
             crossed.append(P[ind])
             try:
@@ -115,6 +115,7 @@ def popul_init(μ, length):
     for _ in range(μ):
         temp = np.random.choice([0, 1], size=(length,))
         Po.append(temp.tolist())
+    Po[0] = np.zeros(length)
     return Po
     
 def save_params(params:dict, filename:str) -> None:
