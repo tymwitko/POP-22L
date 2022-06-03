@@ -3,8 +3,9 @@ import random
 import numpy as np
 from game import Game
 import copy
+import yaml
 
-def genetic(q, μ, pm, pc, iters, length, maks, mini, m):
+def genetic(q, params):#μ, pm, pc, iters, length, maks, mini, m):
     '''
     q - funkcja celu
     μ - liczebnosc populacji
@@ -16,6 +17,14 @@ def genetic(q, μ, pm, pc, iters, length, maks, mini, m):
     mini - minimalna wartość na planszy
     m - liczba kart
     '''
+    μ = params["pop_size"]
+    pm = params["pm"]
+    pc = params["pc"]
+    iters = params["iters"]
+    length = params["n"] * 4
+    maks = params["maks"]
+    mini = params["mini"]
+    m = params["m"]
     Po = popul_init(μ, length)
     best = -inf
     best_pat = []
@@ -107,69 +116,41 @@ def popul_init(μ, length):
         temp = np.random.choice([0, 1], size=(length,))
         Po.append(temp.tolist())
     return Po
+    
+def save_params(params:dict, filename:str) -> None:
+    with open(filename+"_params.yaml", 'w') as file:
+        yaml.safe_dump(params, file, default_flow_style=False)
 
-def save_params(m, n, mini, maks, iters, pop_size, pm, pc, seed_ga, seed_game, filename):
-    tmp = []
-    tmp.append("m = " + str(m) + '\n')
-    tmp.append("n = " + str(n) + '\n')
-    tmp.append("mini = " + str(mini) + '\n')
-    tmp.append("maks = " + str(maks) + '\n')
-    tmp.append("iters = " + str(iters) + '\n')
-    tmp.append("pop_size = " + str(pop_size) + '\n')
-    tmp.append("pm = " + str(pm) + '\n')
-    tmp.append("pc = " + str(pc) + '\n')
-    tmp.append("seed_ga = " + str(seed_ga) + '\n')
-    tmp.append("seed_game = " + str(seed_game) + '\n')
-    try:
-        with open(filename+"_params.txt", 'w') as file:
-            file.writelines(tmp)
-    except:
-        print("SAVING PARAMS TO FILE FAILED!")
+def read_params(filename:str) -> dict:
+    with open(filename+"_params.yaml", 'r') as file:
+        params = yaml.safe_load(file)
+    return params
 
-def save_result(state, score, filename):
+def save_result(state:np.array, score:float, filename:str) -> None:
     try:
         np.savetxt(filename+"_result.txt", state, delimiter=',', fmt='%d', footer="Score: "+str(score))
     except:
         print("SAVING RESULT TO FILE FAILED!")
 
-def main():
-    filename = input("Give filename to save results (without extension, .txt will be used): ")
-    # setting seeds
-    set_seed_ga = True
-    seed_ga = 2137
-    set_seed_game = True
-    seed_game = 2137
-    if set_seed_ga:
-        random.seed(seed_ga)
-        np.random.seed(seed_ga)
-    # game params
-    m = 16
-    n = 8
-    mini = -10
-    maks = 10
-    # GA params
-    iters = 200_0
-    pop_size = 1_00
-    pm = 0.1
-    pc = 0.1
+def run_ga(params:dict, filename:str="") -> None:
+    if params["set_seed_ga"]:
+        random.seed(params["seed_ga"])
+        np.random.seed(params["seed_ga"])
     # create game
-    gejm = Game(m, set_seed=set_seed_game, seed=seed_game)
-    gejm.create_random_board(n, mini, maks)
+    gejm = Game(params["m"], set_seed=params["set_seed_game"], seed=params["seed_game"])
+    gejm.create_random_board(params["n"], params["mini"], params["maks"])
     print(gejm.board)
     # run GA
-    state, score = genetic(gejm.goal_func, pop_size, pm, pc, iters, n*4, maks, mini, m)
+    state, score = genetic(gejm.goal_func, params)
     state = np.array(state)
     state = np.reshape(state, (4, -1))
     print(state, score)
-    try:
-        print(gejm.goal_func(state))
-    except Exception:
-        pass
     # save results to files
-    save_params(m, n, mini, maks, iters, pop_size, pm, pc, seed_ga, seed_game, filename)
-    save_result(state, score, filename)
-    gejm.save_board_to_file(filename+"_board.txt")
-    
+    if filename != "":
+        save_params(params, filename)
+        save_result(state, score, filename)
+        gejm.save_board_to_file(filename+"_board.txt")
 
-if __name__ == "__main__":
-    main()
+def recreate(params_filename:str) -> None:
+    params = read_params(params_filename)
+    run_ga(params)
