@@ -3,11 +3,11 @@ from GA import run_ga
 def main():
     params = {
         "m": 16,
-        "n": 8,
+        "n": 1,
         "mini": -10,
         "maks": 10,
         "iters": 2000,
-        "pop_size": 100,
+        "pop_size": 500,
         "pm": 0.1,
         "pc": 0.1,
         "seed_ga": 2137,
