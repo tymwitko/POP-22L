@@ -4,6 +4,8 @@ import numpy as np
 from game import Game
 import copy
 import yaml
+import timeit
+import datetime
 
 def genetic(q, params):#μ, pm, pc, iters, length, maks, mini, m):
     '''
@@ -127,9 +129,9 @@ def read_params(filename:str) -> dict:
         params = yaml.safe_load(file)
     return params
 
-def save_result(state:np.array, score:float, filename:str) -> None:
+def save_result(state:np.array, score:float, exec_time:str, filename:str) -> None:
     try:
-        np.savetxt(filename+"_result.txt", state, delimiter=',', fmt='%d', footer="Score: "+str(score))
+        np.savetxt(filename+"_result.txt", state, delimiter=',', fmt='%d', footer="Score: "+str(score) + '\n' + 'Execution time: ' + exec_time)
     except:
         print("SAVING RESULT TO FILE FAILED!")
 
@@ -142,14 +144,17 @@ def run_ga(params:dict, filename:str="") -> None:
     gejm.create_random_board(params["n"], params["mini"], params["maks"])
     print(gejm.board)
     # run GA
+    start = timeit.default_timer()
     state, score = genetic(gejm.goal_func, params)
+    stop = timeit.default_timer()
+    exec_time = str(datetime.timedelta(seconds=stop-start))
     state = np.array(state)
     state = np.reshape(state, (4, -1))
     print(state, score)
     # save results to files
     if filename != "" and filename[-1] != '/':
         save_params(params, filename)
-        save_result(state, score, filename)
+        save_result(state, score, exec_time, filename)
         gejm.save_board_to_file(filename+"_board.txt")
 
 def recreate(params_filename:str) -> None:

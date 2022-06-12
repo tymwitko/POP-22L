@@ -3,14 +3,14 @@ from GA import run_ga
 def main():
     params = {
         "m": 16,
-        "n": 1,
+        "n": 8,
         "mini": -10,
         "maks": 10,
-        "iters": 2000,
-        "pop_size": 500,
-        "pm": 0.1,
-        "pc": 0.1,
-        "seed_ga": 2137,
+        "iters": 1 * 10**5,
+        "pop_size": 100,
+        "pm": 0.01,
+        "pc": 0.7,
+        "seed_ga": 1234,
         "seed_game": 2137,
         "set_seed_ga": True,
         "set_seed_game": True
