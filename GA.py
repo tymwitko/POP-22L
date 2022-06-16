@@ -7,7 +7,7 @@ import yaml
 import timeit
 import datetime
 
-def genetic(q, params):#μ, pm, pc, iters, length, maks, mini, m):
+def genetic(q, params, output:bool=True):#μ, pm, pc, iters, length, maks, mini, m):
     '''
     q - funkcja celu
     μ - liczebnosc populacji
@@ -31,7 +31,9 @@ def genetic(q, params):#μ, pm, pc, iters, length, maks, mini, m):
     best = -inf
     best_pat = []
     for t in range(iters):
-        print(' ', str(round(t*100/iters, 3)) + '%   ', end='\r')
+        if output:
+            if t % (iters/100) == 0: # for speed print only whole % numbers
+                print(' ', str(round(t*100/iters)) + '%   ', end='\r')
         Re = select(Po, μ, q, maks, mini, m)
         Mu = cross_mut(Re, pm, pc )
         Po = Mu
@@ -42,7 +44,8 @@ def genetic(q, params):#μ, pm, pc, iters, length, maks, mini, m):
                 best_pat = copy.deepcopy(pat)
             if best >= 0:
                 pass
-    print('          ', end='\r')
+    if output:
+        print('          ', end='\r')
     return best_pat, best
 
 def probability(P, pattern, q, maks, mini, m):
@@ -135,17 +138,18 @@ def save_result(state:np.array, score:float, exec_time:str, filename:str) -> Non
     except:
         print("SAVING RESULT TO FILE FAILED!")
 
-def run_ga(params:dict, filename:str="") -> None:
+def run_ga(params:dict, filename:str="", output:bool=True, show_board:bool=True) -> None:
     if params["set_seed_ga"]:
         random.seed(params["seed_ga"])
         np.random.seed(params["seed_ga"])
     # create game
     gejm = Game(params["m"], set_seed=params["set_seed_game"], seed=params["seed_game"])
     gejm.create_random_board(params["n"], params["mini"], params["maks"])
-    print(gejm.board)
+    if show_board:
+        print(gejm.board)
     # run GA
     start = timeit.default_timer()
-    state, score = genetic(gejm.goal_func, params)
+    state, score = genetic(gejm.goal_func, params, output)
     stop = timeit.default_timer()
     exec_time = str(datetime.timedelta(seconds=stop-start))
     state = np.array(state)

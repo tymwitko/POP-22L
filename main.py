@@ -10,7 +10,7 @@ def main():
         "pop_size": 100,
         "pm": 0.01,
         "pc": 0.7,
-        "seed_ga": 1234,
+        "seed_ga": 1,
         "seed_game": 2137,
         "set_seed_ga": True,
         "set_seed_game": True
