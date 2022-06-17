@@ -35,7 +35,7 @@ def genetic(q, params, output:bool=True):#μ, pm, pc, iters, length, maks, mini,
             if t % (iters/100) == 0: # for speed print only whole % numbers
                 print(' ', str(round(t*100/iters)) + '%   ', end='\r')
         Re = select(Po, μ, q, maks, mini, m)
-        Mu = cross_mut(Re, pm, pc )
+        Mu = cross_mut(Re, pm, pc, m)
         Po = Mu
         for pat in Po:
             val = q(pat)
@@ -75,9 +75,9 @@ def select(P, μ, q, maks, mini, m):
         sel_inds.append(random.choices(range(0,μ), weights=weights, k=1)[0])
     return [P[i] for i in sel_inds]
 
-def cross_mut(R, pm, pc):
+def cross_mut(R, pm, pc, m):
     temp = cross(R, pc)
-    temp = mut(temp, pm)
+    temp = mut(temp, pm, m)
     return temp
 
 def cross(P, pc):
@@ -105,22 +105,36 @@ def cross(P, pc):
         ind += 2
     return crossed
 
-def mut(P, pm):
+def mut(P, pm, m):
     for pattern in P:
-        for unit in pattern:
-            if random.random() <= pm:
-                if unit == 1:
-                    unit = 0
-                else:
-                    unit = 1
+        # for unit in pattern:
+        #     if random.random() <= pm:
+        #         if unit == 1:
+        #             unit = 0
+        #         else:
+        #             unit = 1
+        if random.random() <= pm:
+            rand_ind = int(random.random() * len(pattern))
+            if pattern[rand_ind] == 0:
+                pattern[rand_ind] = 1
+            else:
+                pattern[rand_ind] = 0
+            if sum(pattern) > m:
+                indices = []
+                for ind, i in enumerate(pattern):
+                    if i == 1:
+                        indices.append(ind)
+                rand_ind = int(random.random() * len(indices))
+                pattern[indices[rand_ind]] = 0
+
     return P
 
 def popul_init(μ, length):
     Po = []
     for _ in range(μ):
-        temp = np.random.choice([0, 1], size=(length,))
+        temp = np.zeros(length) #np.random.choice([0, 1], size=(length,))
         Po.append(temp.tolist())
-    Po[0] = np.zeros(length)
+    # Po[0] = np.zeros(length)
     return Po
     
 def save_params(params:dict, filename:str) -> None:
