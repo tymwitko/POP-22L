@@ -119,7 +119,7 @@ def mut(P, pm, m):
                 pattern[rand_ind] = 1
             else:
                 pattern[rand_ind] = 0
-            if sum(pattern) > m:
+            while sum(pattern) > m:
                 indices = []
                 for ind, i in enumerate(pattern):
                     if i == 1:
