@@ -1,0 +1,12 @@
+iters: 100000
+m: 17
+maks: 10
+mini: -10
+n: 5
+pc: 0.7
+pm: 0.01
+pop_size: 100
+seed_ga: 32493
+seed_game: 2137
+set_seed_ga: true
+set_seed_game: true
