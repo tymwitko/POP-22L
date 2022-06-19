@@ -7,5 +7,3 @@ Aby odtworzyć eksperymenty uruchomić `python3 recreate.py`.
 
 Nazwy plików do odtworzenia wrzucać do `recreate.yaml` do jedynej listy.
 Muszą one być w folderze `results/`
-
-Dokumentacja wstępna na Overleaf-ie.
